@@ -1,15 +1,9 @@
-use specs::{Component, VecStorage, System, ReadStorage};
-use std::rc::Rc;
+use specs::{Component, VecStorage, System, ReadStorage, Join};
+use std::{rc::Rc, collections::HashMap};
 
 #[derive(Component)]
 #[storage(VecStorage)]
-pub struct InputComponent(dyn RecievesInput);
-impl RecievesInput for InputComponent {
-    fn forward(&self) {self.0.forward()}
-    fn backward(&self) {self.0.backward()}
-    fn left(&self) {self.0.left()}
-    fn right(&self) {self.0.right()}
-}
+pub struct InputComponent(HashMap<&'static str, fn(magnitude: f32)>);
 
 pub struct InputSystem;
 impl<'a> System<'a> for InputSystem {
@@ -19,11 +13,4 @@ impl<'a> System<'a> for InputSystem {
 
         }
     }
-}
-
-pub trait RecievesInput {
-    fn forward(&self) {}
-    fn backward(&self) {}
-    fn left(&self) {}
-    fn right(&self) {}
 }

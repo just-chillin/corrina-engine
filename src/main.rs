@@ -7,7 +7,6 @@ use specs::{prelude::*, world};
 use graphics::*;
 use input::*;
 use physics::*;
-use std::borrow::Borrow;
 
 mod graphics;
 mod input;
@@ -27,5 +26,7 @@ fn main() {
         .with(InputSystem, "InputSystem", &[])
         .with_thread_local(GraphicsSystem::new(&sdl_video))
         .build();
-    dispatcher.dispatch(&world);
+    loop {
+        dispatcher.dispatch(&world);
+    }
 }
