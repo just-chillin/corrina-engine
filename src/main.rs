@@ -2,9 +2,6 @@
 extern crate lazy_static;
 extern crate sdl2;
 
-use std::sync::{Arc, Mutex};
-
-use sdl2::{render::Canvas, Sdl, video::Window, VideoSubsystem};
 use specs::{prelude::*, world};
 
 use graphics::*;

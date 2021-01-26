@@ -18,52 +18,53 @@ use std::rc::Rc;
 use std::borrow::Borrow;
 use sdl2::render::TextureQuery;
 use sdl2::image::ImageRWops;
+use std::pin::Pin;
+use uuid::Uuid;
 
 #[derive(Component)]
 #[storage(VecStorage)]
 pub struct Renderer {
-    texture_raw: &'static [u8]
+    pub texture_raw: &'static [u8],
+    pub id: Uuid
 }
 impl Renderer {
-    pub fn get_texture(&self) {
+    pub fn get_id(&self) {
+
     }
     pub fn new(texture_raw: &'static [u8]) -> Renderer {
-        Renderer { texture_raw }
+        Renderer {
+            texture_raw,
+            id: Uuid::new_v4()
+        }
     }
 }
-pub struct GraphicsSystem<'b> {
-    canvas: Canvas<Window>,
-    texture_creator: TextureCreator<WindowContext>,
-    texture_cache: HashMap<&'static [u8], Texture<'b>>
+pub struct GraphicsSystem {
+    texture_cache: HashMap<&'static [u8], RwopsContainer>,
+    window_canvas: WindowCanvas
 }
 
-impl GraphicsSystem<'_> {
+impl GraphicsSystem {
     pub fn new(video_subsystem: &VideoSubsystem) -> GraphicsSystem {
         let window = video_subsystem.window("corrina-engine", 800, 600).build().unwrap();
-        let canvas = window.into_canvas().build().unwrap();
-        let texture_creator = canvas.texture_creator();
-        GraphicsSystem { canvas, texture_creator, texture_cache: Default::default() }
+        GraphicsSystem {
+            window_canvas: window.into_canvas().build().unwrap(),
+            texture_cache: Default::default()
+        }
     }
 }
 
-struct RwopsContainer {
+struct RwopsContainer(Pin<Canvas<Surface<'static>>>, Pin<Texture<'static>>);
 
-}
-
-impl<'a> System<'a> for GraphicsSystem<'_> {
+impl<'a> System<'a> for GraphicsSystem {
     type SystemData = (
         ReadStorage<'a, Renderer>,
         ReadStorage<'a, Position>,
     );
     fn run(&mut self, (renderers, positions): Self::SystemData) {
-        self.canvas.set_draw_color(Color::RGB(0, 255, 255));
-        self.canvas.clear();
+        self.window_canvas.set_draw_color(Color::RGB(0, 255, 255));
+        self.window_canvas.clear();
         for (renderer, position) in (&renderers, &positions).join() {
-            let rwops = RWops::from_bytes(renderer.texture_raw).unwrap();
-            let surface = rwops.load().unwrap();
-            let surface_prt = *surface;
-            let texture = self.texture_creator.create_texture_from_surface(surface).unwrap();
-            self.canvas.copy(&texture, None, Rect::new(100, 100, 100, 100));
+
         }
     }
 }
