@@ -11,7 +11,6 @@ use physics::*;
 mod graphics;
 mod input;
 mod physics;
-mod libsdl;
 
 fn main() {
     let sdl = sdl2::init().unwrap();
