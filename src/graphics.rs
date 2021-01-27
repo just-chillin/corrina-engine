@@ -18,6 +18,7 @@ use std::rc::Rc;
 use std::borrow::Borrow;
 use sdl2::render::TextureQuery;
 use sdl2::image::ImageRWops;
+use sdl2::image;
 use std::pin::Pin;
 use uuid::Uuid;
 

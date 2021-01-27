@@ -7,10 +7,12 @@ use specs::{prelude::*, world};
 use graphics::*;
 use input::*;
 use physics::*;
+use sdl_sys::*;
 
 mod graphics;
 mod input;
 mod physics;
+mod sdl_sys;
 
 fn main() {
     let sdl = sdl2::init().unwrap();
