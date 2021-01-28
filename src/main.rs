@@ -1,16 +1,16 @@
-mod sdl_sys;
-mod player;
-mod gamemode;
-mod ents;
-
-extern crate sdl2;
-
-use specs::{World, DispatcherBuilder, WorldExt, Dispatcher};
-use crate::sdl_sys::{SdlSys, IsRunningVal};
 use std::borrow::{Borrow, BorrowMut};
 use std::cell::RefCell;
 use std::sync::atomic::Ordering;
-use crate::gamemode::{GameMode, MyGameMode};
+
+use specs::{Dispatcher, DispatcherBuilder, World, WorldExt};
+
+use crate::sdl_sys::{IsRunningVal, SdlSys};
+
+mod sdl_sys;
+mod game;
+mod components;
+
+extern crate sdl2;
 
 struct ECS<'a> {
     world: World,
@@ -35,12 +35,11 @@ impl ECS<'_> {
 }
 
 fn setup_game<T: GameMode>(mut mode: T, ecs: &mut ECS) {
-    mode.setup();
 }
 
 fn main() {
     let mut ecs = ECS::new();
-    setup_game(MyGameMode, ecs.borrow_mut());
+    let _game_mode = MyGameMode::new(&mut ecs.world);
     while ecs.running() {
         ecs.maintain()
     }
