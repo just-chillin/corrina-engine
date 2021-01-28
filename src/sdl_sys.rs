@@ -56,6 +56,6 @@ impl<'specs> System<'specs> for SdlSys {
     type SystemData = ();
 
     fn run(&mut self, data: Self::SystemData) {
-        IS_RUNNING.set(false);
+
     }
 }
