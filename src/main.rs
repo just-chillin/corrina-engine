@@ -1,6 +1,7 @@
 mod sdl_sys;
 mod player;
 mod gamemode;
+mod ents;
 
 extern crate sdl2;
 
