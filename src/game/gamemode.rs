@@ -1,5 +1,5 @@
-use crate::game::ents::{Enemy, Player};
 use specs::World;
+use crate::game::player::Player;
 
 pub trait GameMode {
     fn new(world: &mut World) -> Self;
@@ -13,8 +13,8 @@ pub struct MyGameMode {
 impl GameMode for MyGameMode {
     fn new(world: &mut World) -> Self {
         Self {
-            player: Player::new(world),
-            enemies: vec![Enemy::new(world), Enemy::new(world)]
+            player: Player {},
+            enemies: vec![Enemy {}, Enemy {}],
         }
     }
 }

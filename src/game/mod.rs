@@ -1,2 +1,2 @@
 mod gamemode;
-mod ents;
+mod player;
