@@ -1,33 +1,23 @@
-#[macro_use]
-extern crate lazy_static;
-extern crate sdl2;
-
-use specs::{prelude::*, world};
-
-use graphics::*;
-use input::*;
-use physics::*;
-use sdl_sys::*;
-
-mod graphics;
-mod input;
-mod physics;
 mod sdl_sys;
 
-fn main() {
-    let sdl = sdl2::init().unwrap();
-    let sdl_video = sdl.video().unwrap();
-    let mut world = World::new();
-    world.register::<InputComponent>();
-    world.register::<Position>();
-    world.register::<Velocity>();
-    world.register::<Renderer>();
+extern crate sdl2;
 
+use specs::{World, DispatcherBuilder, WorldExt};
+use crate::sdl_sys::SdlSys;
+use std::borrow::Borrow;
+use std::cell::RefCell;
+use std::sync::atomic::Ordering;
+
+
+fn main() {
+    let mut world = World::new();
+    let (sdl_sys, is_running) = SdlSys::new();
     let mut dispatcher = DispatcherBuilder::new()
-        .with(InputSystem, "InputSystem", &[])
-        .with_thread_local(GraphicsSystem::new(&sdl_video))
+        .with_thread_local(sdl_sys)
         .build();
-    loop {
+    dispatcher.setup(&mut world);
+    while is_running.get() {
         dispatcher.dispatch(&world);
+        world.maintain();
     }
 }
