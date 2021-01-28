@@ -5,6 +5,7 @@ use std::sync::atomic::Ordering;
 use specs::{Dispatcher, DispatcherBuilder, World, WorldExt};
 
 use crate::sdl_sys::{IsRunningVal, SdlSys};
+use crate::game::my_game_mode::MyGameMode;
 
 mod sdl_sys;
 mod game;
@@ -32,9 +33,6 @@ impl ECS<'_> {
         self.dispatcher.dispatch(&self.world);
         self.world.maintain();
     }
-}
-
-fn setup_game<T: GameMode>(mut mode: T, ecs: &mut ECS) {
 }
 
 fn main() {
